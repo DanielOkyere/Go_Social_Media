@@ -1,0 +1,4 @@
+/.env
+/.vscode
+/go.sum
+/http_requests
