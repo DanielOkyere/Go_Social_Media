@@ -14,12 +14,12 @@ import (
 
 func CreateUser(ctx *gin.Context) {
 	var authInput models.AuthInput
-	
+
 	if err := ctx.ShouldBindJSON(&authInput); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Could not parse auth input"})
 		return
 	}
-	
+
 	var userFound models.User
 	db.DB.Where("email=?", authInput.Email).Find(&userFound)
 	if userFound.ID != 0 {
@@ -39,7 +39,7 @@ func CreateUser(ctx *gin.Context) {
 	}
 
 	db.DB.Create(&user)
-	ctx.JSON(http.StatusCreated, gin.H{"user:": user})
+	ctx.JSON(http.StatusCreated, gin.H{"userID:": user.ID})
 }
 
 func Signin(ctx *gin.Context) {
@@ -64,7 +64,7 @@ func Signin(ctx *gin.Context) {
 	}
 
 	generateToken := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"id":    userFound.ID,
+		"id":  userFound.ID,
 		"exp": time.Now().Add(time.Hour * 12).Unix(),
 	})
 
