@@ -1,0 +1,69 @@
+definitions:
+  models.User:
+    properties:
+      createdAt:
+        type: string
+      email:
+        type: string
+      id:
+        type: integer
+      password:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+externalDocs:
+  description: OpenAPI
+  url: https:://swagger.io/resources/open-api/
+host: localhost:3000
+info:
+  contact:
+    email: daniel.kwame.okyere101@gmail.com
+    name: Daniel Okyere
+    url: http://www.swagger.io/support
+  description: This project is social media api
+  title: Go Social Media API
+  version: "1.0"
+paths:
+  /login:
+    post:
+      consumes:
+      - application/json
+      description: Authenticates user
+      parameters:
+      - description: email for signin
+        in: path
+        name: email
+        required: true
+        type: string
+      - description: password required
+        in: path
+        name: password
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: Authenticates use and provides JWT
+      tags:
+      - user
+  /register:
+    post:
+      consumes:
+      - application/json
+      description: Simple discription to function
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.User'
+      summary: Creates a user and persist to database
+      tags:
+      - user
+swagger: "2.0"

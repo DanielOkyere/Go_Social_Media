@@ -1,0 +1,104 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "This project is social media api",
+        "title": "Go Social Media API",
+        "contact": {
+            "name": "Daniel Okyere",
+            "url": "http://www.swagger.io/support",
+            "email": "daniel.kwame.okyere101@gmail.com"
+        },
+        "version": "1.0"
+    },
+    "host": "localhost:3000",
+    "paths": {
+        "/login": {
+            "post": {
+                "description": "Authenticates user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "Authenticates use and provides JWT",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "email for signin",
+                        "name": "email",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "password required",
+                        "name": "password",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/register": {
+            "post": {
+                "description": "Simple discription to function",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "Creates a user and persist to database",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.User"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "models.User": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "externalDocs": {
+        "description": "OpenAPI",
+        "url": "https:://swagger.io/resources/open-api/"
+    }
+}

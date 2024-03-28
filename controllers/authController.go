@@ -10,8 +10,20 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt"
 	"golang.org/x/crypto/bcrypt"
+	_ "github.com/swaggo/swag/example/celler/httputil"
+    _ "github.com/swaggo/swag/example/celler/model"
 )
 
+
+
+// CreateUser godoc
+//	@Summary		Creates a user and persist to database
+//	@Description	Simple discription to function
+//	@Tags			user
+//	@Accept			application/json
+//	@Produce		application/json
+//	@Success		200	{object}	models.User{}
+//	@Router			/register [post]
 func CreateUser(ctx *gin.Context) {
 	var authInput models.AuthInput
 
@@ -42,6 +54,16 @@ func CreateUser(ctx *gin.Context) {
 	ctx.JSON(http.StatusCreated, gin.H{"userID:": user.ID})
 }
 
+// Signin		godoc
+//	@Summary		Authenticates use and provides JWT
+//	@Description	Authenticates user
+//	@Param			email		path	string	true	"email for signin"
+//	@Param			password	path	string	true	"password required"
+//	@Tags			user
+//	@Accept			application/json
+//	@Produce		application/json
+//	@Success		200	{string}	string
+//	@Router			/login [post]
 func Signin(ctx *gin.Context) {
 	var authInput models.AuthInput
 	var userFound models.User
@@ -78,6 +100,7 @@ func Signin(ctx *gin.Context) {
 		"token": token,
 	})
 }
+
 
 func GetUserProfile(ctx *gin.Context) {
 	user, _ := ctx.Get("currentUser")
