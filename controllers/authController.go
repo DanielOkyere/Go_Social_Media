@@ -87,6 +87,7 @@ func Signin(ctx *gin.Context) {
 
 	generateToken := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"id":  userFound.ID,
+		"email": userFound.Email,
 		"exp": time.Now().Add(time.Hour * 12).Unix(),
 	})
 
@@ -101,7 +102,14 @@ func Signin(ctx *gin.Context) {
 	})
 }
 
-
+// GetUserProfile godoc
+// @Summary Get user profile
+// @Description Get the currently authenticated user
+// @Tags user
+// @Accept json
+// @Produce json
+// @Success 200 {object} models.User
+// @Router /user [get]
 func GetUserProfile(ctx *gin.Context) {
 	user, _ := ctx.Get("currentUser")
 

@@ -66,4 +66,19 @@ paths:
       summary: Creates a user and persist to database
       tags:
       - user
+  /user:
+    get:
+      consumes:
+      - application/json
+      description: Get the currently authenticated user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.User'
+      summary: Get user profile
+      tags:
+      - user
 swagger: "2.0"
