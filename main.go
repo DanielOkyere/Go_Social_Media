@@ -4,12 +4,12 @@ import (
 	"net/http"
 
 	"example.com/m/social_media/db"
+	_ "example.com/m/social_media/docs"
 	"example.com/m/social_media/routes"
 	"example.com/m/social_media/utils"
 	"github.com/gin-gonic/gin"
-	"github.com/swaggo/gin-swagger"
 	"github.com/swaggo/files"
-	_ "example.com/m/social_media/docs"
+	"github.com/swaggo/gin-swagger"
 )
 
 //	@title			Go Social Media API
@@ -30,6 +30,8 @@ func main() {
 
 	utils.LoadEnvs()
 	db.InitDB()
+	db.InitREDIS()
+	go db.HandleServer()
 	routes.RegisterRoutes(server)
 
 	server.GET("/", func(c *gin.Context) {

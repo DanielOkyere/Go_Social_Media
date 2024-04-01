@@ -1,22 +1,23 @@
 package controllers
 
 import (
+	"log"
 	"net/http"
 	"os"
 	"time"
 
 	"example.com/m/social_media/db"
 	"example.com/m/social_media/models"
+	"example.com/m/social_media/utils"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt"
-	"golang.org/x/crypto/bcrypt"
 	_ "github.com/swaggo/swag/example/celler/httputil"
-    _ "github.com/swaggo/swag/example/celler/model"
+	_ "github.com/swaggo/swag/example/celler/model"
+	"golang.org/x/crypto/bcrypt"
 )
 
-
-
 // CreateUser godoc
+//
 //	@Summary		Creates a user and persist to database
 //	@Description	Simple discription to function
 //	@Tags			user
@@ -49,12 +50,17 @@ func CreateUser(ctx *gin.Context) {
 		Email:    authInput.Email,
 		Password: string(passwordHash),
 	}
-
+	task, err := utils.NewEmailDeliveryTask(user.ID, "some:template:id")
+	if err != nil {
+		log.Printf("Could not create email task: %v", err)
+	}
+	go db.REDISCLIENT.Enqueue(task)
 	db.DB.Create(&user)
 	ctx.JSON(http.StatusCreated, gin.H{"userID:": user.ID})
 }
 
 // Signin		godoc
+//
 //	@Summary		Authenticates use and provides JWT
 //	@Description	Authenticates user
 //	@Param			email		path	string	true	"email for signin"
@@ -86,9 +92,9 @@ func Signin(ctx *gin.Context) {
 	}
 
 	generateToken := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"id":  userFound.ID,
+		"id":    userFound.ID,
 		"email": userFound.Email,
-		"exp": time.Now().Add(time.Hour * 12).Unix(),
+		"exp":   time.Now().Add(time.Hour * 12).Unix(),
 	})
 
 	token, err := generateToken.SignedString([]byte(os.Getenv("JWT_SECRET")))

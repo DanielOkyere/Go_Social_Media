@@ -11,6 +11,7 @@ import (
 
 var DB *gorm.DB
 
+// InitDB initializes a Postgresql database connection using gorm
 func InitDB() {
 	dsn := os.Getenv("DB_URL")
 	var err error
