@@ -69,3 +69,10 @@ func CheckAuth(ctx *gin.Context) {
 	ctx.Set("currentUser", user)
 	ctx.Next()
 }
+
+func JSONMiddleware() gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		ctx.Writer.Header().Set("Content-Type", "application/json")
+		ctx.Next()
+	}
+}

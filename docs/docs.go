@@ -29,30 +29,25 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "user"
+                    "authentication"
                 ],
                 "summary": "Authenticates use and provides JWT",
                 "parameters": [
                     {
-                        "type": "string",
-                        "description": "email for signin",
-                        "name": "email",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "password required",
-                        "name": "password",
-                        "in": "path",
-                        "required": true
+                        "description": "Login details",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.AuthInput"
+                        }
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/models.Token"
                         }
                     }
                 }
@@ -68,9 +63,20 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "user"
+                    "authentication"
                 ],
                 "summary": "Creates a user and persist to database",
+                "parameters": [
+                    {
+                        "description": "Signup information",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.AuthInput"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -81,7 +87,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/user": {
+        "/user/me": {
             "get": {
                 "description": "Get the currently authenticated user",
                 "consumes": [
@@ -91,9 +97,19 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "user"
+                    "User"
                 ],
                 "summary": "Get user profile",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "default": "Bearer YOUR_TOKEN",
+                        "description": "Authorization Header",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -106,6 +122,29 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "models.AuthInput": {
+            "type": "object",
+            "required": [
+                "email",
+                "password"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.Token": {
+            "type": "object",
+            "properties": {
+                "token": {
+                    "type": "string"
+                }
+            }
+        },
         "models.User": {
             "type": "object",
             "properties": {

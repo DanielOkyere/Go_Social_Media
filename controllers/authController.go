@@ -20,10 +20,11 @@ import (
 //
 //	@Summary		Creates a user and persist to database
 //	@Description	Simple discription to function
-//	@Tags			user
+//	@Tags			authentication
+//	@Param			body	body	models.AuthInput	true	"Signup information"	
 //	@Accept			application/json
 //	@Produce		application/json
-//	@Success		200	{object}	models.User{}
+//	@Success		200	{object}	models.User{ID, Email}
 //	@Router			/register [post]
 func CreateUser(ctx *gin.Context) {
 	var authInput models.AuthInput
@@ -63,12 +64,11 @@ func CreateUser(ctx *gin.Context) {
 //
 //	@Summary		Authenticates use and provides JWT
 //	@Description	Authenticates user
-//	@Param			email		path	string	true	"email for signin"
-//	@Param			password	path	string	true	"password required"
-//	@Tags			user
+//	@Param			body	body	models.AuthInput	true	"Login details"	models.AuthInput
+//	@Tags			authentication
 //	@Accept			application/json
 //	@Produce		application/json
-//	@Success		200	{string}	string
+//	@Success		200	{object}	models.Token
 //	@Router			/login [post]
 func Signin(ctx *gin.Context) {
 	var authInput models.AuthInput
@@ -109,13 +109,14 @@ func Signin(ctx *gin.Context) {
 }
 
 // GetUserProfile godoc
-// @Summary Get user profile
-// @Description Get the currently authenticated user
-// @Tags user
-// @Accept json
-// @Produce json
-// @Success 200 {object} models.User
-// @Router /user [get]
+//	@Summary		Get user profile
+//	@Description	Get the currently authenticated user
+//	@Tags			User
+//	@Accept			json
+//	@Produce		json
+//	@Param			Authorization	header		string	true	"Authorization Header"	default(Bearer YOUR_TOKEN)
+//	@Success		200				{object}	models.User{ID, Email}
+//	@Router			/user/me [get]
 func GetUserProfile(ctx *gin.Context) {
 	user, _ := ctx.Get("currentUser")
 

@@ -1,4 +1,19 @@
 definitions:
+  models.AuthInput:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  models.Token:
+    properties:
+      token:
+        type: string
+    type: object
   models.User:
     properties:
       createdAt:
@@ -31,31 +46,34 @@ paths:
       - application/json
       description: Authenticates user
       parameters:
-      - description: email for signin
-        in: path
-        name: email
+      - description: Login details
+        in: body
+        name: body
         required: true
-        type: string
-      - description: password required
-        in: path
-        name: password
-        required: true
-        type: string
+        schema:
+          $ref: '#/definitions/models.AuthInput'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            type: string
+            $ref: '#/definitions/models.Token'
       summary: Authenticates use and provides JWT
       tags:
-      - user
+      - authentication
   /register:
     post:
       consumes:
       - application/json
       description: Simple discription to function
+      parameters:
+      - description: Signup information
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/models.AuthInput'
       produces:
       - application/json
       responses:
@@ -65,12 +83,19 @@ paths:
             $ref: '#/definitions/models.User'
       summary: Creates a user and persist to database
       tags:
-      - user
-  /user:
+      - authentication
+  /user/me:
     get:
       consumes:
       - application/json
       description: Get the currently authenticated user
+      parameters:
+      - default: Bearer YOUR_TOKEN
+        description: Authorization Header
+        in: header
+        name: Authorization
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -80,5 +105,5 @@ paths:
             $ref: '#/definitions/models.User'
       summary: Get user profile
       tags:
-      - user
+      - User
 swagger: "2.0"
